@@ -1,0 +1,173 @@
+媒体列表
+
+搜索框(公司名/应用名)
+
+公司名称 应用名称 系统(安卓 iOS) 应用包名 下载链接 样式截图 预估用户 审核状态
+
+supplyList
+
+
+{
+    "status": 0,
+    "listCount": 10,
+    "page": 1,
+    "pageSize": 10,
+    "data": [
+        {
+             "id": 1,
+            "companyName": "奇虎",
+            "appName": "360杀毒",
+            "os": "Android,iOS",
+            "packageName": "com.qihu.com",
+            "downloadUrl": "www.360.com",
+            "snapShot": "aa.gif,bb.gif",
+            "userCount": 300000,
+            "auditStatus": 1
+        },
+    {
+             "id": 2,
+            "companyName": "奇虎2",
+            "appName": "360杀毒",
+            "os": "Android,iOS",
+            "packageName": "com.qihu.com",
+            "downloadUrl": "www.360.com",
+            "snapShot": "aa.gif,bb.gif",
+            "userCount": 300000,
+            "auditStatus": 1
+        }
+    ]
+}
+
+
+
+
+广告位列表
+
+应用名称　广告位id  广告位名称  广告形式
+SlotList
+{
+    "status": 0,
+    "listCount": 10,
+    "page": 1,
+    "pageSize": 10,
+    "data": [
+        {
+            "appId": 1,
+            "appName": "360杀毒",
+            "slotId": 1,
+            "slotName": "开屏",
+            "adType": 1
+        },
+        {
+            "appId": 1,
+            "appName": "360杀毒",
+            "slotId": 2,
+            "slotName": "信息流",
+            "adType": 2
+        }
+    ]
+}
+
+
+广告位管理 和上面重复忽略，
+
+过滤条件 应用名(下拉) 广告形式(下拉）
+
+
+ 公司名称 应用名称  广告位id  广告位名称  广告形式 预估流量
+
+
+
+
+第三方广告管理
+thirdPartAdList
+
+平台名称 对接形式(API/SDK) 广告形式
+
+{
+    "status": 0,
+    "listCount": 10,
+    "page": 1,
+    "pageSize": 10,
+    "data": [
+        {
+            "id": 1,
+            "adPlatformName": "有道",
+            "dockType": "API",
+            "adType": "开屏",
+            "desc": "有道DSP"
+        }
+    ]
+}
+
+直客管理
+
+广告主管理：
+
+广告主名称　所属行业　联系人　联系电话　广告主主页
+
+advertiserList
+{
+    "status": 0,
+    "listCount": 10,
+    "page": 1,
+    "pageSize": 10,
+    "data": [
+        {
+            "id": 1,
+            "advertiserName": "小米",
+            "industry": "硬件",
+            "contact": "雷军",
+            "tel": 1311111111,
+            "mainpage": "www.xiaomi.com"
+        }
+    ]
+}
+
+广告列表
+广告主名称 广告名称 总预算  每日预算 频次 系统 地域  媒体类别 结算类型 广告价格 投放开始时间 点击跳转 落地页 状态、
+
+创意
+
+名称 图片/视频 高 宽
+
+
+报表
+
+ 媒体端
+ 搜索：ａｐｐ名称　广告位　日期
+
+ app名称 曝光 点击 填充率 曝光成功率 ECPM
+
+ 点击app名称
+ app名称 广告位 曝光 点击 填充率 曝光成功率 ECPM 日期
+
+ 点击日期
+
+ app名称 广告位 曝光 点击 填充率 曝光成功率 ECPM 日期
+
+
+　
+　广告端：　
+　　搜索：广告主　　广告　时间
+　　曝光／点击／下载／预算消耗
+
+
+
+管理员：
+
+　新增：管理员名称 邮箱 密码
+
+  管理员列表
+
+
+优化：
+
+平台列表：　1　选择广告优先级
+　　　　　　2  选择直客优先级
+　　　　　　3  选择直客category
+            4  选择预算分配
+　　　　　　
+
+
+

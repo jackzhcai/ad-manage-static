@@ -48,11 +48,11 @@ export default [
       const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
 
       return {
-        code: 20000,
-        data: {
-          total: mockList.length,
-          items: pageList
-        }
+        status: 0,
+        listCount: mockList.length,
+        page: Number(page),
+        pageSize: Number(limit),
+        data: pageList
       }
     }
   },
