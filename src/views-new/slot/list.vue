@@ -59,6 +59,7 @@
 </template>
 
 <script>
+import { apps, ads } from '../common/contant'
 import { fetchSoltList } from '@/api/article-new'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -68,6 +69,7 @@ export default {
   components: { Pagination },
   directives: { waves },
   data() {
+    const querys = this.$route.query || {}
     return {
       tableKey: 0,
       list: null,
@@ -76,33 +78,11 @@ export default {
       listQuery: {
         page: 1,
         pageSize: 20,
-        appId: '',
+        appId: parseInt(querys.app_id) || '',
         adType: ''
       },
-      apps: [
-        {
-          name: '360杀毒',
-          id: 1
-        },
-        {
-          name: '哔哩哔哩',
-          id: 2
-        },
-        {
-          name: '爱奇艺',
-          id: 3
-        }
-      ],
-      ads: [
-        {
-          id: 1,
-          name: 'name-1'
-        },
-        {
-          id: 2,
-          name: 'name-2'
-        }
-      ]
+      apps: apps,
+      ads: ads
     }
   },
   created() {

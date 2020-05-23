@@ -22,13 +22,19 @@
         </template>
       </el-table-column>
       <el-table-column label="公司名称" width="200" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.companyName }}</span>
+        <template slot-scope="scope">
+          {{ scope.row.companyName }}
         </template>
       </el-table-column>
       <el-table-column label="应用名称" width="200" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.appName }}</span>
+        <template slot-scope="scope">
+          <el-button
+            type="text"
+            size="small"
+            @click.native.prevent="goToSlotList(scope.$index)"
+          >
+            {{ scope.row.appName }}
+          </el-button>
         </template>
       </el-table-column>
       <el-table-column label="系统" width="150" align="center">
@@ -48,7 +54,7 @@
       </el-table-column>
       <el-table-column label="样式截图" width="180" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.snapShot }}</span>
+          <img v-for="(img, index) in row.snapShot" :key="index" :src="img" style="width: 100%; display: block">
         </template>
       </el-table-column>
       <el-table-column label="预估用户" width="150" align="center">
@@ -129,6 +135,15 @@ export default {
       //   this.listQuery.sort = '-id'
       // }
       this.handleFilter()
+    },
+    goToSlotList(index, list) {
+      const data = this.list[index] || {}
+      this.$router.push({
+        name: 'SlotList',
+        query: {
+          app_id: data.appId
+        }
+      })
     }
   }
 }
