@@ -54,3 +54,30 @@ export function fetchCreativeList(query) {
   })
 }
 
+// 获取报表服务端媒体数据
+export function fetchReportServeSupplyList(query) {
+  return request({
+    url: '/report/serve/supply',
+    method: 'get',
+    params: query
+  })
+}
+
+// 获取报表服务端媒体数据
+export function fetchReportServeSlotList(query) {
+  return request({
+    url: '/report/serve/slot',
+    method: 'get',
+    params: query
+  })
+}
+
+// 获取报表服务端媒体数据
+export function fetchReportServeChannelList(query) {
+  return request({
+    url: '/report/serve/channel',
+    method: 'get',
+    params: query
+  })
+}
+

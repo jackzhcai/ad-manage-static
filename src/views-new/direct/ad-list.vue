@@ -1,11 +1,10 @@
 
 <template>
   <div class="app-container">
-    <div class="filter-container">
-      <el-select v-model="listQuery.advertiserId" placeholder="请选择广告主名称" clearable style="width: 180px" class="filter-item">
-        <el-option v-for="item in advertisers" :key="item.id" :label="item.name" :value="item.id" />
-      </el-select>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+    <div class="filter-container" style="display: flex; justify-items: flex-start; padding-bottom: 24px;">
+      <el-button type="primary" style="margin-right: 24px;" @click="handleAddRole">新增</el-button>
+      <el-input v-model="listQuery.advertiserName" placeholder="请输入广告主名称" style="width: 200px; margin-bottom: 0; margin-right: 12px;" class="filter-item" />
+      <el-button v-waves class="filter-item" style="margin-bottom: 0;" type="primary" icon="el-icon-search" @click="handleFilter">
         搜素
       </el-button>
     </div>
@@ -93,44 +92,92 @@
       </el-table-column>
       <el-table-column label="状态" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.status }}</span>
+          <span>{{ row.auditStatusDesc }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" min-width="120" label="操作">
+        <template slot-scope="scope">
+          <el-button :disabled="scope.row.auditStatus !== 0 && scope.row.auditStatus !== 1" type="primary" size="small" @click="handleEdit(scope)">编辑</el-button>
+          <el-button :disabled="scope.row.auditStatus < 4" type="danger" size="small" @click="handleDelete(scope)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pageSize" @pagination="getList" />
 
+    <el-dialog :visible.sync="dialogVisible" :title="dialogType==='edit'?'编辑广告':'新增广告'">
+      <el-form :model="form" label-width="100px" label-position="left">
+        <el-form-item label="广告位名称">
+          <el-input v-model="form.slotName" placeholder="请输入广告位名称" />
+        </el-form-item>
+        <el-form-item label="优先级列表">
+          <el-select v-model="form.priorityLevel" style="width: 100%" placeholder="请选择优先级列表">
+            <el-option label="有道" :value="1" />
+            <el-option label="直客" :value="2" />
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div style="text-align:right;">
+        <el-button type="danger" @click="dialogVisible=false">取消</el-button>
+        <el-button type="primary" :loading="loading" @click="confirmRole">确定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { advertisers } from '../common/contant'
-import { fetchAdList } from '@/api/article-new'
+import { deepClone } from '@/utils'
+import { fetchAdList } from '@/api/new/article'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
+const defaultForm = {
+  id: '',
+  slotId: '',
+  slotName: '',
+  priorityLevel: '',
+  priorityLevelDesc: ''
+}
 export default {
   name: 'AdList',
   components: { Pagination },
   directives: { waves },
   data() {
-    const querys = this.$route.query || {}
     return {
       tableKey: 0,
       list: null,
       total: 0,
+
+      loading: false,
       listLoading: true,
-      advertisers: advertisers,
+      form: Object.assign({}, defaultForm),
+      dialogVisible: false,
+      dialogType: 'new',
+
       listQuery: {
         page: 1,
         pageSize: 20,
-        advertiserId: parseInt(querys.advertiser_id) || ''
+        advertiserId: ''
+      }
+    }
+  },
+  watch: {
+    '$route': {
+      deep: true,
+      handler() {
+        this.setQuery()
+        this.handleFilter()
       }
     }
   },
   created() {
+    this.setQuery()
     this.getList()
   },
   methods: {
+    setQuery() {
+      const querys = this.$route.query || {}
+      this.listQuery.advertiserName = querys.advertiser_name || ''
+    },
     getList() {
       this.listLoading = true
       fetchAdList(this.listQuery).then(response => {
@@ -165,7 +212,7 @@ export default {
       this.$router.push({
         name: 'CreativeList',
         query: {
-          ad_id: data.adId || ''
+          ad_name: data.adName || ''
         }
       })
     },
@@ -174,9 +221,52 @@ export default {
       this.$router.push({
         name: 'CreativeList',
         query: {
-          advertiser_id: data.advertiserId || ''
+          advertiser_name: data.advertiserName || ''
         }
       })
+    },
+    handleAddRole() {
+      this.form = Object.assign({}, defaultForm)
+      this.dialogType = 'new'
+      this.dialogVisible = true
+    },
+    handleEdit(scope) {
+      this.dialogType = 'edit'
+      this.dialogVisible = true
+      this.checkStrictly = true
+      this.form = deepClone(scope.row)
+      this.$nextTick(() => {
+        this.checkStrictly = false
+      })
+    },
+    handleDelete({ $index, row }) {
+      this.$confirm('确定要删除吗？', '确认', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功！'
+          })
+        })
+        .catch(err => { console.error(err) })
+    },
+    confirmRole() {
+      let msg = ''
+      const isEdit = this.dialogType === 'edit'
+      if (isEdit) {
+        msg = '编辑成功！'
+      } else {
+        msg = '新建成功！'
+      }
+      this.loading = true
+      setTimeout(() => {
+        this.loading = false
+        this.dialogVisible = false
+        this.$message.success(msg)
+      }, 1000)
     }
   }
 }

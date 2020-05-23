@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { fetchAdvertiserList } from '@/api/article-new'
+import { fetchAdvertiserList } from '@/api/new/article'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -111,7 +111,7 @@ export default {
       this.$router.push({
         name: 'AdList',
         query: {
-          advertiser_id: data.advertiserId
+          advertiser_name: data.advertiserName
         }
       })
     }

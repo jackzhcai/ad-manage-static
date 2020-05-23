@@ -1,21 +1,28 @@
 <template>
   <div class="app-container">
     <el-button type="primary" @click="handleAddRole">新增</el-button>
-
-    <el-table :data="rolesList" style="width: 100%;margin-top:30px;" border>
-      <el-table-column align="center" label="用户名" width="220">
+    <el-table
+      :key="tableKey"
+      v-loading="listLoading"
+      :data="dataList"
+      border
+      fit
+      highlight-current-row
+      style="width: 100%;margin-top:30px;"
+    >
+      <el-table-column align="center" label="广告位ID">
         <template slot-scope="scope">
-          {{ scope.row.name }}
+          {{ scope.row.slotId }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="密码" width="220">
+      <el-table-column align="center" label="广告位名称">
         <template slot-scope="scope">
-          {{ scope.row.key }}
+          {{ scope.row.slotName }}
         </template>
       </el-table-column>
-      <el-table-column align="header-center" label="邮箱">
+      <el-table-column align="center" label="优先级列表">
         <template slot-scope="scope">
-          {{ scope.row.email }}
+          {{ scope.row.priorityLevelDesc }}
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作">
@@ -25,17 +32,18 @@
         </template>
       </el-table-column>
     </el-table>
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pageSize" @pagination="getList" />
 
-    <el-dialog :visible.sync="dialogVisible" :title="dialogType==='edit'?'编辑管理员':'新增管理员'">
-      <el-form :model="form" label-width="80px" label-position="left">
-        <el-form-item label="用户名">
-          <el-input v-model="form.name" placeholder="请输入用户名" />
+    <el-dialog :visible.sync="dialogVisible" :title="dialogType==='edit'?'编辑广告优先级':'新增广告优先级'">
+      <el-form :model="form" label-width="100px" label-position="left">
+        <el-form-item label="广告位名称">
+          <el-input v-model="form.slotName" placeholder="请输入广告位名称" />
         </el-form-item>
-        <el-form-item label="密码">
-          <el-input v-model="form.key" placeholder="请输入密码" />
-        </el-form-item>
-        <el-form-item label="邮箱">
-          <el-input v-model="form.email" placeholder="请输入邮箱" />
+        <el-form-item label="优先级列表">
+          <el-select v-model="form.priorityLevel" style="width: 100%" placeholder="请选择优先级列表">
+            <el-option label="有道" :value="1" />
+            <el-option label="直客" :value="2" />
+          </el-select>
         </el-form-item>
       </el-form>
       <div style="text-align:right;">
@@ -48,33 +56,51 @@
 
 <script>
 import { deepClone } from '@/utils'
-import { getRoles } from '@/api/new/role'
+import { fetchOptimizeAdList } from '@/api/new/optimize'
+import waves from '@/directive/waves' // waves directive
+import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 const defaultForm = {
-  key: '',
-  name: '',
-  email: ''
+  id: '',
+  slotId: '',
+  slotName: '',
+  priorityLevel: '',
+  priorityLevelDesc: ''
 }
 
 export default {
-  name: 'PermissionRole',
+  name: 'OptimizeAd',
+  components: { Pagination },
+  directives: { waves },
   data() {
     return {
+      tableKey: 0,
+      listLoading: true,
       loading: false,
       form: Object.assign({}, defaultForm),
       dialogVisible: false,
       dialogType: 'new',
       checkStrictly: false,
-      rolesList: []
+      dataList: [],
+      total: 0,
+      listQuery: {
+        page: 1,
+        pageSize: 20
+      }
     }
   },
   created() {
-    this.getRoles()
+    this.getList()
   },
   methods: {
-    async getRoles() {
-      const res = await getRoles()
-      this.rolesList = res.data
+    async getList() {
+      this.listLoading = true
+      const res = await fetchOptimizeAdList(this.listQuery)
+      this.total = res.listCount
+      this.dataList = res.data
+      setTimeout(() => {
+        this.listLoading = false
+      }, 300)
     },
     handleAddRole() {
       this.form = Object.assign({}, defaultForm)

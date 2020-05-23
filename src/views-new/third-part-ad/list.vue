@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { fetchThirdPartAdList } from '@/api/article-new'
+import { fetchThirdPartAdList } from '@/api/new/article'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 

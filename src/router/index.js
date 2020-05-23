@@ -96,19 +96,19 @@ export const constantRoutes = [
   //     }
   //   ]
   // },
-  {
-    path: '/guide',
-    component: Layout,
-    redirect: '/guide/index',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/guide/index'),
-        name: 'Guide',
-        meta: { title: '引导页', icon: 'guide', noCache: true }
-      }
-    ]
-  },
+  // {
+  //   path: '/guide',
+  //   component: Layout,
+  //   redirect: '/guide/index',
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/guide/index'),
+  //       name: 'Guide',
+  //       meta: { title: '引导页', icon: 'guide', noCache: true }
+  //     }
+  //   ]
+  // },
   {
     path: '/profile',
     component: Layout,
@@ -253,19 +253,111 @@ export const asyncRoutes = [
     },
     children: [
       {
-        path: 'serve/list',
-        component: () => import('@/views-new/report/serve-list'),
-        name: 'ServeList',
+        path: 'serve',
+        component: () => import('@/views-new/report/index'),
+        name: 'ReportServe',
         meta: {
           title: '媒体端'
+        },
+        children: [
+          {
+            path: 'supply',
+            component: () => import('@/views-new/report/serve/supply'),
+            name: 'ReportServeSupply',
+            meta: {
+              title: '媒体'
+            }
+          },
+          {
+            path: 'slot',
+            component: () => import('@/views-new/report/serve/slot'),
+            name: 'ReportServeSlot',
+            meta: {
+              title: '广告位'
+            }
+          },
+          {
+            path: 'channel',
+            component: () => import('@/views-new/report/serve/channel'),
+            name: 'ReportServeChannel',
+            meta: {
+              title: '广告分布'
+            }
+          }
+        ]
+      },
+      {
+        path: 'client',
+        component: () => import('@/views-new/report/index'),
+        name: 'ReportClient',
+        meta: {
+          title: '广告端'
+        },
+        children: [
+          {
+            path: 'test1',
+            component: () => import('@/views-new/report/client/test'),
+            name: 'ReportClientTest1',
+            meta: {
+              title: '测试1'
+            }
+          },
+          {
+            path: 'test2',
+            component: () => import('@/views-new/report/client/test'),
+            name: 'ReportClientTest2',
+            meta: {
+              title: '测试2'
+            }
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    path: '/optimize',
+    component: Layout,
+    alwaysShow: true, // will always show the root menu
+    name: 'Optimize',
+    meta: {
+      title: '优化',
+      icon: 'nested'
+    },
+    redirect: {
+      name: 'OptimizeAd'
+    },
+    children: [
+      {
+        path: 'ad',
+        component: () => import('@/views-new/optimize/ad'),
+        name: 'OptimizeAd',
+        meta: {
+          title: '广告优先级'
         }
       },
       {
-        path: 'client/list',
-        component: () => import('@/views-new/report/client-list'),
-        name: 'ClientList',
+        path: 'direct',
+        component: () => import('@/views-new/optimize/direct'),
+        name: 'OptimizeDirect',
         meta: {
-          title: '广告端'
+          title: '直客广告优先级'
+        }
+      },
+      {
+        path: 'category',
+        component: () => import('@/views-new/optimize/category'),
+        name: 'OptimizeAd',
+        meta: {
+          title: '直客广告投放类别'
+        }
+      },
+      {
+        path: 'budget',
+        component: () => import('@/views-new/optimize/budget'),
+        name: 'OptimizeBudget',
+        meta: {
+          title: '直客广告预算分配'
         }
       }
     ]
@@ -278,35 +370,35 @@ export const asyncRoutes = [
     alwaysShow: true, // will always show the root menu
     name: 'Permission',
     meta: {
-      title: '权限管理',
+      title: '管理员',
       icon: 'lock',
       roles: ['admin', 'editor'] // you can set roles in root nav
     },
     children: [
-      {
-        path: 'page',
-        component: () => import('@/views-new/permission/page'),
-        name: 'PagePermission',
-        meta: {
-          title: '页面权限',
-          roles: ['admin'] // or you can only set roles in sub nav
-        }
-      },
-      {
-        path: 'directive',
-        component: () => import('@/views-new/permission/directive'),
-        name: 'DirectivePermission',
-        meta: {
-          title: '指令权限'
-          // if do not set roles, means: this page does not require permission
-        }
-      },
+      // {
+      //   path: 'page',
+      //   component: () => import('@/views-new/permission/page'),
+      //   name: 'PagePermission',
+      //   meta: {
+      //     title: '页面权限',
+      //     roles: ['admin'] // or you can only set roles in sub nav
+      //   }
+      // },
+      // {
+      //   path: 'directive',
+      //   component: () => import('@/views-new/permission/directive'),
+      //   name: 'DirectivePermission',
+      //   meta: {
+      //     title: '指令权限'
+      //     // if do not set roles, means: this page does not require permission
+      //   }
+      // },
       {
         path: 'role',
         component: () => import('@/views-new/permission/role'),
         name: 'RolePermission',
         meta: {
-          title: '用户权限',
+          title: '管理员列表',
           roles: ['admin']
         }
       }

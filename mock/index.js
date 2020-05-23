@@ -6,10 +6,11 @@ import role from './role'
 import article from './article'
 import search from './remote-search'
 //
-import userNew from './user-new'
-import roleNew from './role-new'
-import articleNew from './article-new'
-import remoteSearchNew from './remote-search-new'
+import newUser from './new/user'
+import newRole from './new/role'
+import newArticle from './new/article'
+import newRemoteSearch from './new/remote-search'
+import newOptimize from './new/optimize'
 
 const mocks = [
   ...user,
@@ -17,10 +18,11 @@ const mocks = [
   ...article,
   ...search,
   //
-  ...userNew,
-  ...roleNew,
-  ...articleNew,
-  ...remoteSearchNew
+  ...newUser,
+  ...newRole,
+  ...newArticle,
+  ...newRemoteSearch,
+  ...newOptimize
 ]
 
 // for front mock

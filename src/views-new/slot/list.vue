@@ -1,12 +1,8 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-select v-model="listQuery.appId" placeholder="请选择应用名" clearable style="width: 180px" class="filter-item">
-        <el-option v-for="item in apps" :key="item.id" :label="item.name" :value="item.id" />
-      </el-select>
-      <el-select v-model="listQuery.adType" placeholder="请选择广告形式" clearable class="filter-item" style="width: 180px">
-        <el-option v-for="item in ads" :key="item.id" :label="item.name" :value="item.id" />
-      </el-select>
+      <el-input v-model="listQuery.appName" placeholder="请输入应用名" style="width: 200px;" class="filter-item" />
+      <el-input v-model="listQuery.adType" placeholder="请输入广告形式" style="width: 200px;" class="filter-item" />
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜素
       </el-button>
@@ -26,19 +22,9 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="应用ID" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.appId }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="应用名称" align="center">
         <template slot-scope="{row}">
           <span>{{ row.appName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="广告位ID" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.slotId }}</span>
         </template>
       </el-table-column>
       <el-table-column label="广告位名称" align="center">
@@ -59,8 +45,7 @@
 </template>
 
 <script>
-import { apps, ads } from '../common/contant'
-import { fetchSoltList } from '@/api/article-new'
+import { fetchSoltList } from '@/api/new/article'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -69,7 +54,6 @@ export default {
   components: { Pagination },
   directives: { waves },
   data() {
-    const querys = this.$route.query || {}
     return {
       tableKey: 0,
       list: null,
@@ -78,17 +62,29 @@ export default {
       listQuery: {
         page: 1,
         pageSize: 20,
-        appId: parseInt(querys.app_id) || '',
+        appName: '',
         adType: ''
-      },
-      apps: apps,
-      ads: ads
+      }
+    }
+  },
+  watch: {
+    '$route': {
+      deep: true,
+      handler() {
+        this.setQuery()
+        this.handleFilter()
+      }
     }
   },
   created() {
+    this.setQuery()
     this.getList()
   },
   methods: {
+    setQuery() {
+      const querys = this.$route.query || {}
+      this.listQuery.appName = querys.app_name || ''
+    },
     getList() {
       this.listLoading = true
       fetchSoltList(this.listQuery).then(response => {

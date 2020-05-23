@@ -1,8 +1,15 @@
 <template>
   <div class="app-container">
-    <div class="filter-container">
-      <el-input v-model="listQuery.advertiserName" placeholder="请输入广告主名称" style="width: 200px;" class="filter-item" />
-      <el-input v-model="listQuery.adName" placeholder="请输入广告名称" style="width: 200px;" class="filter-item" />
+    <div class="filter-container" style="display: flex; align-items: flex-start">
+      <el-input v-model="listQuery.appName" placeholder="请输入APP名称" style="width: 200px; margin-right: 6px;" class="filter-item" />
+      <el-input v-model="listQuery.slotName" placeholder="请输入广告位" style="width: 200px; margin-right: 6px;" class="filter-item" />
+      <el-date-picker
+        v-model="listQuery.date"
+        type="date"
+        style="margin-right: 6px;"
+        value-format="yyyy-MM-dd"
+        placeholder="选择日期"
+      />
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜素
       </el-button>
@@ -22,29 +29,55 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="广告名称" align="center">
+      <el-table-column label="APP名称" align="center">
         <template slot-scope="scope">
-          {{ scope.row.adName }}
+          {{ scope.row.appName }}
         </template>
       </el-table-column>
-      <el-table-column label="创意名称" align="center">
+      <el-table-column label="广告位" align="center">
         <template slot-scope="scope">
-          {{ scope.row.creativeName }}
+          <el-button
+            type="text"
+            size="small"
+            @click.native.prevent="goToReportServeChannel(scope.$index)"
+          >
+            {{ scope.row.slotName }}
+          </el-button>
         </template>
       </el-table-column>
-      <el-table-column label="宽度" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.width }}</span>
+      <el-table-column label="曝光" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.impressonCount }}
         </template>
       </el-table-column>
-      <el-table-column label="高度" align="center">
+      <el-table-column label="点击" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.height }}</span>
+          <span>{{ row.clickCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="url" align="center">
+      <el-table-column label="填充率" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.url }}</span>
+          <span>{{ row.fillingRate }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="曝光成功率" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.successRate }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="日期" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.date }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="ECPM" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.ecpm }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="CTR" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.ctr }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -54,12 +87,12 @@
 </template>
 
 <script>
-import { fetchCreativeList } from '@/api/new/article'
+import { fetchReportServeSlotList } from '@/api/new/article'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
-  name: 'CreativeList',
+  name: 'ReportServeSlot',
   components: { Pagination },
   directives: { waves },
   data() {
@@ -68,23 +101,12 @@ export default {
       list: null,
       total: 0,
       listLoading: true,
-      advertisers: [
-        {
-          name: '小米',
-          id: 1
-        }
-      ],
-      ads: [
-        {
-          name: '信息流',
-          id: 1
-        }
-      ],
       listQuery: {
         page: 1,
         pageSize: 20,
-        adName: '',
-        advertiserName: ''
+        appName: '',
+        slotName: '',
+        date: ''
       }
     }
   },
@@ -104,12 +126,11 @@ export default {
   methods: {
     setQuery() {
       const querys = this.$route.query || {}
-      this.listQuery.adName = querys.ad_name || ''
-      this.listQuery.advertiserName = querys.advertiser_name || ''
+      this.listQuery.appName = querys.app_name || ''
     },
     getList() {
       this.listLoading = true
-      fetchCreativeList(this.listQuery).then(response => {
+      fetchReportServeSlotList(this.listQuery).then(response => {
         this.list = response.data
         this.total = response.listCount
         // Just to simulate the time of the request
@@ -135,6 +156,15 @@ export default {
       //   this.listQuery.sort = '-id'
       // }
       this.handleFilter()
+    },
+    goToReportServeChannel(index, list) {
+      const data = this.list[index] || {}
+      this.$router.push({
+        name: 'ReportServeChannel',
+        query: {
+          slot_name: data.slotName
+        }
+      })
     }
   }
 }
