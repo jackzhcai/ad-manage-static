@@ -285,33 +285,33 @@ export const asyncRoutes = [
             }
           }
         ]
-      },
-      {
-        path: 'client',
-        component: () => import('@/views-new/report/index'),
-        name: 'ReportClient',
-        meta: {
-          title: '广告端'
-        },
-        children: [
-          {
-            path: 'test1',
-            component: () => import('@/views-new/report/client/test'),
-            name: 'ReportClientTest1',
-            meta: {
-              title: '测试1'
-            }
-          },
-          {
-            path: 'test2',
-            component: () => import('@/views-new/report/client/test'),
-            name: 'ReportClientTest2',
-            meta: {
-              title: '测试2'
-            }
-          }
-        ]
       }
+      // {
+      //   path: 'client',
+      //   component: () => import('@/views-new/report/index'),
+      //   name: 'ReportClient',
+      //   meta: {
+      //     title: '广告端'
+      //   },
+      //   children: [
+      //     {
+      //       path: 'test1',
+      //       component: () => import('@/views-new/report/client/test'),
+      //       name: 'ReportClientTest1',
+      //       meta: {
+      //         title: '测试1'
+      //       }
+      //     },
+      //     {
+      //       path: 'test2',
+      //       component: () => import('@/views-new/report/client/test'),
+      //       name: 'ReportClientTest2',
+      //       meta: {
+      //         title: '测试2'
+      //       }
+      //     }
+      //   ]
+      // }
     ]
   },
 
