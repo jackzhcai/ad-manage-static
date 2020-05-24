@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container" style="display: flex; justify-items: flex-start; padding-bottom: 24px;">
-      <el-button type="primary" style="margin-right: 24px;" @click="handleAddRole">新增</el-button>
+      <!--<el-button type="primary" style="margin-right: 24px;" @click="handleAddRole">新增</el-button>-->
       <el-input v-model="listQuery.companyName" placeholder="请输入公司名称" style="width: 200px; margin-bottom: 0; margin-right: 12px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button v-waves class="filter-item" style="margin-bottom: 0" type="primary" icon="el-icon-search" @click="handleFilter">
         搜素
@@ -68,10 +68,10 @@
           <span>{{ row.auditStatusDesc }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" min-width="120" label="操作">
+      <el-table-column align="center" min-width="150" label="操作">
         <template slot-scope="scope">
-          <el-button :disabled="scope.row.auditStatus !== 0 && scope.row.auditStatus !== 1" type="primary" size="small" @click="handleEdit(scope)">编辑</el-button>
-          <el-button :disabled="scope.row.auditStatus < 4" type="danger" size="small" @click="handleDelete(scope)">删除</el-button>
+          <el-button :disabled="scope.row.auditStatus !== 0 && scope.row.auditStatus !== 1" type="primary" size="small">编辑</el-button>
+          <el-button :disabled="scope.row.auditStatus < 4" type="danger" size="small">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
